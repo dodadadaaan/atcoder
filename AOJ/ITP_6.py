@@ -50,6 +50,15 @@ for i in range(1, 53):
 C問題
 """
 
+n = int(input())
+a = list() #空のリスト
+
+for i in range(n):
+	b, f, r, v = map(int,input().split())
+
+	
+
+
 """
 D問題
 """
