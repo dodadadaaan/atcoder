@@ -8,15 +8,19 @@ for i in range(n):
 	b, f, r, v = map(int,input().split())
 	if b == 1:
 		a1[f-1][r-1] = v
+		print(a1)
 
 	elif b == 2:
 		a2[f-1][r-1] = v
+		print(a2)
 
 	elif b == 3:
 		a3[f-1][r-1] = v
+		print(a3)
 
 	else:
 		a4[f-1][r-1] = v
+		print(a4)
 
 print(a1)
 print('#'*10)
