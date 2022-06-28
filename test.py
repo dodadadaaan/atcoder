@@ -1,31 +1,58 @@
-n = int(input())
-a1 = [[0 for i in range(10)] for j in range(3)] #空のリスト
-a2 = [[0 for i in range(10)] for j in range(3)] #空のリスト
-a3 = [[0 for i in range(10)] for j in range(3)] #空のリスト
-a4 = [[0 for i in range(10)] for j in range(3)] #空のリスト
+import numpy as np
+from matplotlib import pyplot as plt
+from scipy.integrate import solve_ivp 
+import os
+import time
 
-for i in range(n):
-	b, f, r, v = map(int,input().split())
-	if b == 1:
-		a1[f-1][r-1] = v
-		print(a1)
+from util import (
+    mu,
+    compute_Lagrange,
+    compute_dU_bar,
+    Energy,
+    pcr3bp_phi,
+    lyap_init,
+    event_y0mp,
+    event_y0pm
+)
 
-	elif b == 2:
-		a2[f-1][r-1] = v
-		print(a2)
+def diff_corr():
 
-	elif b == 3:
-		a3[f-1][r-1] = v
-		print(a3)
+def contination():
+    
 
-	else:
-		a4[f-1][r-1] = v
-		print(a4)
+def main():
+    t1 = time.time()
+    #ラグランジュ点の座標
+    L = compute_Lagrange()
+    E = [-1.59, -1.57, -1.55, -1.53, -1.51]
+    colors = ['blue', 'cyan', 'green', 'red', 'gold']
+    ans = list()
+    #グラフの設定
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    for i in range(5):
+        x1 = contination(L[0][0], E[i])
+        x2 = contination(L[0][1], E[i])
+        line1 = solve_ivp(pcr3bp_phi, [0,100], x1, events=event_y0mp,rtol = 1e-12, atol = 1e-12)
+        line2 = solve_ivp(pcr3bp_phi, [0,100], x2, events=event_y0pm,rtol = 1e-12, atol = 1e-12)
+        ans.append(line1.t[-1]/np.pi)
+        ax.plot(line1.y[0], line1.y[1], color=colors[i], label=f'E:{E[i]}')
+        ax.plot(line2.y[0], line2.y[1], color=colors[i])
+        
+    ax.plot(L[0][:2],L[1][:2],'kX')
+    ax.set_xlabel('$\it{x}$',fontsize=25,fontstyle='italic')
+    ax.set_ylabel('y',fontsize=25)
+    fig.gca().set_aspect('equal')
+    ax.set_title('Lyapunov')
+    plt.tight_layout()
+    fig.legend()
+    #グラフの保存
+    fig.savefig(os.path.dirname(__file__)+"\Lyapunov.png")
 
-print(a1)
-print('#'*10)
-print(a2)
-print('#'*10)
-print(a3)
-print('#'*10)
-print(a4)
+    t2 = time.time()
+    print(ans)
+    print(f'経過時間:{t2-t1}s')
+    plt.show()
+
+if __name__=='__main__':
+    main()
